@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>彻底摆脱配置文件 二 (zkconfigutil resolve自动生成) | jerry&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="java, 分布式系统, thrift, storm, nosql" />
+  
+  
+  
+  
+  <meta name="description" content="olve的编写问题，写个eclipse插件看来是比较好的做法，JET也不好弄，所以由于时间限制，短期内没有过多时间去研究eclipse插件（虽对osgi还算熟悉），也在博客中发表过想找合作伙伴开发一个eclipse插件，但也不是很容易实现，所以产生了这个模版，这个实现相对比较容易，但也不能说是万能的，有弊端，但也可以完美满足非特殊情况，请您慢慢往下欣赏！！ resolve template文件在工">
+<meta name="keywords" content="distributed system,zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="彻底摆脱配置文件 二 (zkconfigutil resolve自动生成)">
+<meta property="og:url" content="https://jerrysearch.github.io/2014/03/01/zkconfigutil_2/index.html">
+<meta property="og:site_name" content="jerry&#39;s blog">
+<meta property="og:description" content="olve的编写问题，写个eclipse插件看来是比较好的做法，JET也不好弄，所以由于时间限制，短期内没有过多时间去研究eclipse插件（虽对osgi还算熟悉），也在博客中发表过想找合作伙伴开发一个eclipse插件，但也不是很容易实现，所以产生了这个模版，这个实现相对比较容易，但也不能说是万能的，有弊端，但也可以完美满足非特殊情况，请您慢慢往下欣赏！！ resolve template文件在工">
+<meta property="og:updated_time" content="2017-05-10T03:27:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="彻底摆脱配置文件 二 (zkconfigutil resolve自动生成)">
+<meta name="twitter:description" content="olve的编写问题，写个eclipse插件看来是比较好的做法，JET也不好弄，所以由于时间限制，短期内没有过多时间去研究eclipse插件（虽对osgi还算熟悉），也在博客中发表过想找合作伙伴开发一个eclipse插件，但也不是很容易实现，所以产生了这个模版，这个实现相对比较容易，但也不能说是万能的，有弊端，但也可以完美满足非特殊情况，请您慢慢往下欣赏！！ resolve template文件在工">
+  
+    <link rel="alternate" href="/atom.xml" title="jerry&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+
+</head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives"] = "Archives"; 
+
+  themeMenus["/about"] = "About"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" title="jerry&#39;s blog" rel="home"> jerry&#39;s blog </a>
+            
+          </h1>
+
+          
+            <div class="site-description">jerry&#39;s blog</div>
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-zkconfigutil_2" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      彻底摆脱配置文件 二 (zkconfigutil resolve自动生成)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2014/03/01/zkconfigutil_2/" class="article-date">
+	  <time datetime="2014-02-28T18:05:18.000Z" itemprop="datePublished">March 1, 2014</time>
+	</a>
+
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>olve的编写问题，写个eclipse插件看来是比较好的做法，JET也不好弄，所以由于时间限制，短期内没有过多时间去研究eclipse插件（虽对osgi还算熟悉），也在博客中发表过想找合作伙伴开发一个eclipse插件，但也不是很容易实现，所以产生了这个模版，这个实现相对比较容易，但也不能说是万能的，有弊端，但也可以完美满足非特殊情况，请您慢慢往下欣赏！！</p>
+<p>resolve template文件在工程template下，网络地址：template resolve</p>
+<p>这个模版实际上就是eclipse editor template，是个xml文件，您可以在Window -&gt; Preferences -&gt; Java -&gt; Editor -&gt; Templates，选择import导入该xml即可</p>
+<p>到底什么是resolve，为什么需要resolve，请您看这篇博客zkconfigutil详解</p>
+<p>这里假设您看过了zkconfigutil的使用或原理实现，我们知道，想对某个class的某个属性实现zookeeper配置，我们需要为每个字段都写一个自己的resolve，这个工作量非常大，并重复性严重，那么有了这个工具后，假如我有个 Demo class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@TypeZkConfigurable</span>(path = <span class="string">"/test/jerry"</span>, server = <span class="string">"localhost:2181"</span>, useOwnZkServer = <span class="keyword">false</span>)</div><div class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="meta">@FieldZkConfigurable</span>(resolve = DemoF1Resolve.class, dynamicUpdate = <span class="keyword">true</span>)</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> String F1 = <span class="string">"F1"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@FieldZkConfigurable</span>(resolve = DemoF2Resolve.class, dynamicUpdate = <span class="keyword">true</span>)</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> String F2 = <span class="string">"F2"</span>;</div><div class="line"></div><div class="line">	<span class="meta">@FieldZkConfigurable</span>(resolve = DemoF3Resolve.class, dynamicUpdate = <span class="keyword">true</span>)</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Boolean F3 = <span class="keyword">false</span>;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>现在我想写F2字段的DemoF2Resolve.class,您可以在这个demo的空白位置，写个F2（必须与相应属性的名字相同，不同也可以，自己再调整），然后按eclipse的提示快捷键，一般为 ALT+/，在提示列表中会看到resolve，选择这个resolve，eclipse就会根据resolve_template.xml生成DemoF2Resolve.class了，如果您的这个属性是string类型，那么接下来就不需要做任何事情，直接可以使用</p>
+<p>代码实例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoF2Resolve</span> <span class="keyword">extends</span> <span class="title">AbstractResolve</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">resolve</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// TODO Auto-generated method stub</span></div><div class="line">		<span class="keyword">return</span> Demo.F2.toString();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dResolve</span><span class="params">(String src)</span> </span>&#123;</div><div class="line">		<span class="comment">// TODO Auto-generated method stub</span></div><div class="line">		Demo.F2 = src;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<p>添加通用resolve生成模板</p>
+<p>cast_resolve_template.xml文件在工程template下,地址：cast_resolve_template</p>
+<p>自动生成resolve如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoF3Resolve</span> <span class="keyword">extends</span> <span class="title">AbstractResolve</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">resolve</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">// TODO Auto-generated method stub</span></div><div class="line">		<span class="keyword">return</span> Demo.F3.toString();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dResolve</span><span class="params">(String src)</span> </span>&#123;</div><div class="line">		<span class="comment">// TODO Auto-generated method stub</span></div><div class="line">		Demo.F3 = Demo.F3.getClass().cast(src);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>时候不早了，写的比较仓促，有些地方可能说的不是很清晰，希望大家有问题或有更好的实现、idea，可以在下方留言或直接联系兄弟</p>
+<hr>
+<p>jerry 于2014-03-01 凌晨</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/zkconfigutil/">zkconfigutil</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/distributed-system/">distributed system</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yODAyOS80NjA2">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/03/17/zkconfigutil_3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          彻底摆脱配置文件 三(zkconfigutil通用resolve自动生成)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/02/18/zkconfigutil_1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">彻底摆脱配置文件 一(zkconfigutil详解)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav">None</ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2017 jerry&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
