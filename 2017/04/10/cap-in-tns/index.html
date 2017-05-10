@@ -59,11 +59,11 @@
 <script>
 var themeMenus = {};
 
-  themeMenus["/"] = "Home"; 
+  themeMenus["/"] = "首页"; 
 
-  themeMenus["/archives"] = "Archives"; 
+  themeMenus["/archives"] = "归档"; 
 
-  themeMenus["/about"] = "About"; 
+  themeMenus["/about"] = "关于"; 
 
 </script>
 
@@ -92,11 +92,11 @@ var themeMenus = {};
 
               <ul id="main-nav" class="nmenu sf-js-enabled">
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">首页</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">归档</a> </li>
                     
-                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">关于</a> </li>
                     
               </ul>
             </div>
@@ -107,6 +107,14 @@ var themeMenus = {};
   </div>
 </header>
 
+
+  <div style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img width="100%" alt="Hike News" src="/css/images/pose.jpg">
+      </div>
+
+  </div>
 
 
 
@@ -132,7 +140,7 @@ var themeMenus = {};
     <div class="article-meta">
       
 	Posted on <a href="/2017/04/10/cap-in-tns/" class="article-date">
-	  <time datetime="2017-04-09T18:05:18.000Z" itemprop="datePublished">April 10, 2017</time>
+	  <time datetime="2017-04-09T18:05:18.000Z" itemprop="datePublished">四月 10, 2017</time>
 	</a>
 
       
@@ -293,7 +301,7 @@ var themeMenus = {};
   
   
     <a href="/2016/04/18/tns-different-usage-and-gray-release/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">tns两种使用模式和灰度发布</div>
     </a>
   
@@ -306,7 +314,7 @@ var themeMenus = {};
 
   <aside id="sidebar">
     <div id="toc" class="toc-article">
-    <strong class="toc-title">Contents</strong>
+    <strong class="toc-title">文章目录</strong>
     
       <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cap"><span class="nav-number">1.</span> <span class="nav-text">cap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture-in-tns"><span class="nav-number">2.</span> <span class="nav-text">Architecture in tns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#故障检测"><span class="nav-number">2.1.</span> <span class="nav-text">故障检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性"><span class="nav-number">2.2.</span> <span class="nav-text">一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cluster视角"><span class="nav-number">2.2.1.</span> <span class="nav-text">cluster视角</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#增加node（cluster、service）"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">增加node（cluster、service）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#移除node（service）"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">移除node（service）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client视角"><span class="nav-number">2.2.2.</span> <span class="nav-text">client视角</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可用性"><span class="nav-number">2.3.</span> <span class="nav-text">可用性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cluster视角-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">cluster视角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client视角-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">client视角</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分区容忍性"><span class="nav-number">2.4.</span> <span class="nav-text">分区容忍性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性详解"><span class="nav-number">2.5.</span> <span class="nav-text">一致性详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cluster-之移除service-node"><span class="nav-number">2.5.1.</span> <span class="nav-text">cluster 之移除service node</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接下来看看三个周期需要满足什么条件？"><span class="nav-number">2.5.1.1.</span> <span class="nav-text">接下来看看三个周期需要满足什么条件？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回过头来，假设没有Tombstone-1阶段是否可行？"><span class="nav-number">2.5.1.2.</span> <span class="nav-text">回过头来，假设没有Tombstone_1阶段是否可行？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群节点数上限"><span class="nav-number">2.5.1.3.</span> <span class="nav-text">集群节点数上限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终一致时间"><span class="nav-number">2.5.2.</span> <span class="nav-text">最终一致时间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#提前须知"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">提前须知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#增加cluster-node"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">增加cluster node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#增加service-node"><span class="nav-number">2.5.2.3.</span> <span class="nav-text">增加service node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下线service-node"><span class="nav-number">2.5.2.4.</span> <span class="nav-text">下线service node</span></a></li></ol></li></ol></li></ol></li></ol>
     
